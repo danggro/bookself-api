@@ -71,6 +71,9 @@ const addBookHandler = (request, h) => {
 const getAllBooksHandler = (request, h) => {
   const { name, reading, finished } = request.query;
 
+  const intReading = parseInt(reading, 10);
+  const intFinished = parseInt(finished, 10);
+
   if (name) {
     const response = h.response({
       status: 'success',
@@ -88,12 +91,12 @@ const getAllBooksHandler = (request, h) => {
     return response;
   }
 
-  if (reading) {
+  if (intReading === 1 || intReading === 0) {
     const response = h.response({
       status: 'success',
       data: {
         books: books
-          .filter((book) => book.reading === reading)
+          .filter((book) => book.reading === Boolean(intReading))
           .map((book) => ({
             id: book.id,
             name: book.name,
@@ -105,12 +108,12 @@ const getAllBooksHandler = (request, h) => {
     return response;
   }
 
-  if (finished) {
+  if (intFinished === 0 || intFinished === 1) {
     const response = h.response({
       status: 'success',
       data: {
         books: books
-          .filter((book) => book.finished === finished)
+          .filter((book) => book.finished === Boolean(intFinished))
           .map((book) => ({
             id: book.id,
             name: book.name,
